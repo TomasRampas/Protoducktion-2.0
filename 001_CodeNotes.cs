@@ -13,3 +13,24 @@
 // ------------------------------------------------------
 // - Instantiate = create instance of an object
 // - Instance = made out of prefab, there can be unlimited number of instances of an object
+// - Reference variable = stores an address of a prefab, object, etc.
+
+
+// VARIABLE TYPES
+// ------------------------------------------------------
+// - float
+// - GameObject
+
+//CODE EXAMPLES
+// ------------------------------------------------------
+//Move object
+transform.Translate(Vector3.up * speed);
+
+//Do seomthing whe key is pressed
+if (Input.GetKey(KeyCode.LeftArrow))
+{
+    transform.Translate(Vector3.left * moveSpeed);
+}
+
+//Instantiate a bullet object in player cube
+Instantiate(bulletPrefab, transform.position, transform.rotation);
