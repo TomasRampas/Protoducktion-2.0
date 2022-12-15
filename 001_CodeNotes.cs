@@ -19,7 +19,9 @@
 // VARIABLE TYPES
 // ------------------------------------------------------
 // - float
+public float moveSpeed;
 // - GameObject
+public GameObject bulletPrefab;
 
 //CODE EXAMPLES
 // ------------------------------------------------------
