@@ -17,6 +17,10 @@
 // - GameManager game object = runs in background, never gets destroyed,
 // controls stuff in the game
 // - There are never spaces in a Script name
+// - Do not allow change of variables or other things from other scripts. Only annouce
+// that something has happened, and let the script handle it. Example is that a bullet
+// tells game manager enemy was hit, but only the game manager raises the score that is
+// handeled in the game manager NOT the bullet
 
 
 // VOCABULARY
@@ -26,11 +30,17 @@
 // - Reference variable = stores an address of a prefab, object, etc.
 // - Exclusive = the value will neve be reached
 // - Inclusive = the value counts into the selection
+// - Namespace = lines of code at the very top starting with "using" that give acces
+// to systems and code libraries
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 // BUILT IN FUNCTIONS
 // ------------------------------------------------------
 // - OnTriggerEnter = used to define what happens when objects trigger detects something
 using System;
+using static System.Net.Mime.MediaTypeNames;
 
 private void OnTriggerEnter (Collider other)
 
@@ -59,8 +69,18 @@ void SpawnEnemy()
 // COMPONENTS
 // ------------------------------------------------------
 // - Rigidbody - adds ability to object to work with physics engine
-// - Rigidbody / Is Kinematic - sets the object to be part of the physics engine, BUT can be moved only by script, if kinematic is on -> disable use gravity
-// - 
+// - Rigidbody / Is Kinematic - sets the object to be part of the physics engine,
+// BUT can be moved only by script, if kinematic is on -> disable use gravity
+// - UI events - on buttons, field "On Click", allows to say what will happen when the button
+// is clicked
+
+
+// NAMESPACES
+// ------------------------------------------------------
+// - Namespace for UI - must be added to namespaces any time I want to do something with UI
+using UnityEngine.UI;
+// - Namespace for scene management - allows to load different scene
+using UnityEngine.SceneManagement;
 
 // CODE CALLS
 // ------------------------------------------------------
@@ -69,6 +89,31 @@ void SpawnEnemy()
 InvokeRepeating("SpawnEnemy", 0, 0.5f);
 // - RANDOM RANGE = sets range between two values (min, max), returns random value
 randomPos.x = Random.Range(-9, 9);
+// - FIND OBJECT OF TYPE = finds object in a scene the object with search is located int
+public GameManager manager;
+manager = GameObject.FindObjectOfType<GameManager>();
+// - PRINT = prints an info into console, used a lot in debuging
+print(manager);
+// - ToString = change variable into string
+gameScore.text = score.ToString();
+
+
+// MATH SYMBOLS
+// ------------------------------------------------------
+// = -> sets variable to something else
+Vector3 randomPos = Vector3.zero;
+// == -> compares variable with something else and gives true or false result
+if (other.tag == "Baddies")
+// += -> adds to the exiting variable, the two below have the same result
+score = score + 1;
+score += 1;
+// the above works for all the operators
+score *= 1;
+score /= 1;
+score -= 1;
+// ++ or -- always adds or removes 1 from the variable
+score++;
+score--;
 
 
 //CODE EXAMPLES
@@ -114,3 +159,25 @@ void SpawnEnemy()
     randomPos.z = 0;
     Instantiate(enemyPrefab, randomPos, transform.rotation);
 }
+
+// Searching for a game object in scene and attaching it to a prefab (bullet needs to access score)
+public GameManager manager;
+
+void Start()
+{
+    manager = GameObject.FindObjectOfType<GameManager>();
+}
+
+// Changing a UI text into value in a variable, have to have correct namespace + set variable
+using UnityEngine.UI;
+
+public Text gameScore;
+
+gameScore.text = score.ToString();
+
+// Loding a different scene through a custom function
+void ChangeScene()
+{
+    SceneManager.LoadScene("SampleScene");
+}
+
